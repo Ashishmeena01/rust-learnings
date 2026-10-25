@@ -1,0 +1,10 @@
+# Rust build artifacts
+target/
+**/target/
+
+# IDE and OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+*.lock.d
