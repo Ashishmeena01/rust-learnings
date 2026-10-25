@@ -1,7 +1,7 @@
 use std::fmt;
 
 use color_eyre::Result;
-use crossterm::event::{self, KeyCode};
+use crossterm::event::{self, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout, Margin, Rect};
 use ratatui::style::{Color, Modifier, Style, Stylize};
 use ratatui::text::{Line, Text};
@@ -24,7 +24,11 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
     let mut view_mode = ViewMode::Year;
     loop {
         terminal.draw(|frame| render(frame, calendar_style, selected_date))?;
-        if let Some(key) = event::read()?.as_key_press_event() {
+        if let Ok(event) = event::read() {
+            if let Some(key) = event.as_key_press_event() {
+                if key.kind != KeyEventKind::Press {
+                    continue;
+                }
             match key.code {
                 KeyCode::Char('q') => break Ok(()),
                 KeyCode::Char('s') => calendar_style = calendar_style.next(),
