@@ -69,7 +69,6 @@ fn render(frame: &mut Frame, calendar_style: StyledCalendar, selected_date: Date
         )),
     ]);
 
-    println!("{}", header.height());
 
     let [text_area, area] = frame.area().layout(&Layout::vertical([
         Constraint::Length(header.height() as u16),
