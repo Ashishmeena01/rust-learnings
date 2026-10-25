@@ -20,7 +20,7 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
         .map(|dt| dt.date())
         .unwrap_or_else(|_| Date::from_calendar_date(2026, Month::January, 1).unwrap());
     let mut selected_date = today;
-    let mut calendar_style = StyledCalendar::Default;
+    let mut calendar_style = StyledCalendar::MonthAndWeekdaysHeader;
     loop {
         terminal.draw(|frame| render(frame, calendar_style, selected_date))?;
         if let Some(key) = event::read()?.as_key_press_event() {
