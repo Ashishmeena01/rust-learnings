@@ -24,8 +24,8 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
             match key.code {
                 KeyCode::Char('q') => break Ok(()),
                 KeyCode::Char('s') => calendar_style = calendar_style.next(),
-                KeyCode::Char('n') | KeyCode::Tab => selected_date = next_month(selected_date),
-                KeyCode::Char('p') | KeyCode::BackTab => selected_date = prev_month(selected_date),
+                KeyCode::Char('n') | KeyCode::Tab => selected_date = change_month(selected_date, 1),
+                KeyCode::Char('p') | KeyCode::BackTab => selected_date = change_month(selected_date, -1),
                 KeyCode::Char('h') | KeyCode::Left => selected_date -= 1.days(),
                 KeyCode::Char('j') | KeyCode::Down => selected_date += 1.weeks(),
                 KeyCode::Char('k') | KeyCode::Up => selected_date -= 1.weeks(),
@@ -36,26 +36,49 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
     }
 }
 
-fn next_month(date: Date) -> Date {
-    if date.month() == Month::December {
-        date.replace_month(Month::January)
-            .unwrap()
-            .replace_year(date.year() + 1)
-            .unwrap()
-    } else {
-        date.replace_month(date.month().next()).unwrap()
+fn is_leap_year(year: i32) -> bool {
+    (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+}
+
+fn days_in_month(year: i32, month: Month) -> u8 {
+    match month {
+        Month::January => 31,
+        Month::February => if is_leap_year(year) { 29 } else { 28 },
+        Month::March => 31,
+        Month::April => 30,
+        Month::May => 31,
+        Month::June => 30,
+        Month::July => 31,
+        Month::August => 31,
+        Month::September => 30,
+        Month::October => 31,
+        Month::November => 30,
+        Month::December => 31,
     }
 }
 
-fn prev_month(date: Date) -> Date {
-    if date.month() == Month::January {
-        date.replace_month(Month::December)
-            .unwrap()
-            .replace_year(date.year() - 1)
-            .unwrap()
+fn change_month(date: Date, delta: i32) -> Date {
+    let year = date.year();
+    let current_m = date.month() as i32;
+    let new_m = current_m + delta;
+
+    let (target_year, target_month_num) = if new_m > 12 {
+        let yr_add = (new_m - 1) / 12;
+        let m = ((new_m - 1) % 12) + 1;
+        (year + yr_add, m as u8)
+    } else if new_m < 1 {
+        let yr_sub = (12 - new_m) / 12;
+        let m = 12 - ((12 - new_m) % 12);
+        let m = if m == 0 { 12 } else { m };
+        (year - yr_sub, m as u8)
     } else {
-        date.replace_month(date.month().previous()).unwrap()
-    }
+        (year, new_m as u8)
+    };
+
+    let target_month = Month::try_from(target_month_num).unwrap();
+    let max_day = days_in_month(target_year, target_month);
+    let clamped_day = date.day().min(max_day);
+    Date::from_calendar_date(target_year, target_month, clamped_day).unwrap()
 }
 
 fn render(frame: &mut Frame, calendar_style: StyledCalendar, selected_date: Date) {
