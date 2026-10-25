@@ -119,6 +119,14 @@ fn get_season(date: Date) -> (&'static str, &'static str) {
     }
 }
 
+fn days_in_year(year: i32) -> u16 {
+    if is_leap_year(year) {
+        366
+    } else {
+        365
+    }
+}
+
 fn is_leap_year(year: i32) -> bool {
     (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 }
