@@ -24,6 +24,8 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
             match key.code {
                 KeyCode::Char('q') => break Ok(()),
                 KeyCode::Char('s') => calendar_style = calendar_style.next(),
+                KeyCode::Char('y') | KeyCode::Char(']') => selected_date = change_year(selected_date, 1),
+                KeyCode::Char('Y') | KeyCode::Char('[') => selected_date = change_year(selected_date, -1),
                 KeyCode::Char('n') | KeyCode::Tab => selected_date = change_month(selected_date, 1),
                 KeyCode::Char('p') | KeyCode::BackTab => selected_date = change_month(selected_date, -1),
                 KeyCode::Char('h') | KeyCode::Left => selected_date -= 1.days(),
@@ -55,6 +57,13 @@ fn days_in_month(year: i32, month: Month) -> u8 {
         Month::November => 30,
         Month::December => 31,
     }
+}
+
+fn change_year(date: Date, delta: i32) -> Date {
+    let target_year = date.year() + delta;
+    let max_day = days_in_month(target_year, date.month());
+    let clamped_day = date.day().min(max_day);
+    Date::from_calendar_date(target_year, date.month(), clamped_day).unwrap()
 }
 
 fn change_month(date: Date, delta: i32) -> Date {
