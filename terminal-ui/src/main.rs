@@ -103,6 +103,22 @@ fn next_event(from_date: Date) -> Option<(&'static CalendarEvent, i64)> {
     closest
 }
 
+fn get_season(date: Date) -> (&'static str, &'static str) {
+    let (m, d) = (date.month(), date.day());
+    match m {
+        Month::March if d >= 20 => ("Spring", "🌸"),
+        Month::April | Month::May => ("Spring", "🌸"),
+        Month::June if d < 21 => ("Spring", "🌸"),
+        Month::June if d >= 21 => ("Summer", "☀️"),
+        Month::July | Month::August => ("Summer", "☀️"),
+        Month::September if d < 22 => ("Summer", "☀️"),
+        Month::September if d >= 22 => ("Autumn", "🍂"),
+        Month::October | Month::November => ("Autumn", "🍂"),
+        Month::December if d < 21 => ("Autumn", "🍂"),
+        _ => ("Winter", "❄️"),
+    }
+}
+
 fn is_leap_year(year: i32) -> bool {
     (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 }
