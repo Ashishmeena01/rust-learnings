@@ -22,6 +22,7 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
     let mut selected_date = today;
     let mut calendar_style = StyledCalendar::MonthAndWeekdaysHeader;
     let mut view_mode = ViewMode::Year;
+    let mut show_help = false;
     loop {
         terminal.draw(|frame| render(frame, calendar_style, selected_date))?;
         if let Ok(event) = event::read() {
@@ -30,7 +31,8 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
                     continue;
                 }
             match key.code {
-                KeyCode::Char('q') => break Ok(()),
+                KeyCode::Char('q') | KeyCode::Esc => break Ok(()),
+                KeyCode::Char('?') => show_help = !show_help,
                 KeyCode::Char('s') => calendar_style = calendar_style.next(),
                 KeyCode::Char('v') | KeyCode::Enter => view_mode = view_mode.toggle(),
                 KeyCode::Char('t') => selected_date = today,
