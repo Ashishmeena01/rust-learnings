@@ -21,12 +21,14 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
         .unwrap_or_else(|_| Date::from_calendar_date(2026, Month::January, 1).unwrap());
     let mut selected_date = today;
     let mut calendar_style = StyledCalendar::MonthAndWeekdaysHeader;
+    let mut view_mode = ViewMode::Year;
     loop {
         terminal.draw(|frame| render(frame, calendar_style, selected_date))?;
         if let Some(key) = event::read()?.as_key_press_event() {
             match key.code {
                 KeyCode::Char('q') => break Ok(()),
                 KeyCode::Char('s') => calendar_style = calendar_style.next(),
+                KeyCode::Char('v') | KeyCode::Enter => view_mode = view_mode.toggle(),
                 KeyCode::Char('t') => selected_date = today,
                 KeyCode::Char('y') | KeyCode::Char(']') => selected_date = change_year(selected_date, 1),
                 KeyCode::Char('Y') | KeyCode::Char('[') => selected_date = change_year(selected_date, -1),
@@ -203,6 +205,28 @@ fn render(frame: &mut Frame, calendar_style: StyledCalendar, selected_date: Date
 }
 
 #[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ViewMode {
+    Year,
+    Month,
+}
+
+impl ViewMode {
+    pub const fn toggle(self) -> Self {
+        match self {
+            Self::Year => Self::Month,
+            Self::Month => Self::Year,
+        }
+    }
+
+    pub const fn name(self) -> &'static str {
+        match self {
+            Self::Year => "Year Overview",
+            Self::Month => "Focused Month",
+        }
+    }
+}
+
 enum StyledCalendar {
     Default,
     Surrounding,
