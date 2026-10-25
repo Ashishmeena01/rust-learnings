@@ -16,7 +16,10 @@ fn main() -> Result<()> {
 }
 
 fn run(terminal: &mut DefaultTerminal) -> Result<()> {
-    let mut selected_date = OffsetDateTime::now_local()?.date();
+    let today = OffsetDateTime::now_local()
+        .map(|dt| dt.date())
+        .unwrap_or_else(|_| Date::from_calendar_date(2026, Month::January, 1).unwrap());
+    let mut selected_date = today;
     let mut calendar_style = StyledCalendar::Default;
     loop {
         terminal.draw(|frame| render(frame, calendar_style, selected_date))?;
@@ -24,6 +27,7 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
             match key.code {
                 KeyCode::Char('q') => break Ok(()),
                 KeyCode::Char('s') => calendar_style = calendar_style.next(),
+                KeyCode::Char('t') => selected_date = today,
                 KeyCode::Char('y') | KeyCode::Char(']') => selected_date = change_year(selected_date, 1),
                 KeyCode::Char('Y') | KeyCode::Char('[') => selected_date = change_year(selected_date, -1),
                 KeyCode::Char('n') | KeyCode::Tab => selected_date = change_month(selected_date, 1),
