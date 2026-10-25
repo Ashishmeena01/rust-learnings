@@ -42,6 +42,47 @@ fn run(terminal: &mut DefaultTerminal) -> Result<()> {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct CalendarEvent {
+    pub month: Month,
+    pub day: u8,
+    pub name: &'static str,
+    pub icon: &'static str,
+    pub is_holiday: bool,
+}
+
+pub const CALENDAR_EVENTS: &[CalendarEvent] = &[
+    CalendarEvent { month: Month::January, day: 1, name: "New Year's Day", icon: "🎉", is_holiday: true },
+    CalendarEvent { month: Month::January, day: 26, name: "Republic Day", icon: "🇮🇳", is_holiday: true },
+    CalendarEvent { month: Month::February, day: 2, name: "Groundhog Day", icon: "🦫", is_holiday: false },
+    CalendarEvent { month: Month::February, day: 14, name: "Valentine's Day", icon: "💖", is_holiday: false },
+    CalendarEvent { month: Month::March, day: 8, name: "Int'l Women's Day", icon: "🌸", is_holiday: false },
+    CalendarEvent { month: Month::March, day: 20, name: "Spring Equinox", icon: "🌱", is_holiday: false },
+    CalendarEvent { month: Month::April, day: 1, name: "April Fools' Day", icon: "🃏", is_holiday: false },
+    CalendarEvent { month: Month::April, day: 22, name: "Earth Day", icon: "🌍", is_holiday: true },
+    CalendarEvent { month: Month::May, day: 1, name: "Labor Day", icon: "🛠️", is_holiday: true },
+    CalendarEvent { month: Month::May, day: 4, name: "Star Wars Day", icon: "⭐", is_holiday: false },
+    CalendarEvent { month: Month::June, day: 21, name: "Summer Solstice", icon: "☀️", is_holiday: false },
+    CalendarEvent { month: Month::July, day: 4, name: "Independence Day", icon: "🎆", is_holiday: true },
+    CalendarEvent { month: Month::August, day: 15, name: "Independence Day (IN)", icon: "🇮🇳", is_holiday: true },
+    CalendarEvent { month: Month::September, day: 22, name: "Autumn Equinox", icon: "🍂", is_holiday: false },
+    CalendarEvent { month: Month::October, day: 31, name: "Halloween", icon: "🎃", is_holiday: true },
+    CalendarEvent { month: Month::November, day: 11, name: "Veterans Day", icon: "🎖️", is_holiday: true },
+    CalendarEvent { month: Month::December, day: 21, name: "Winter Solstice", icon: "❄️", is_holiday: false },
+    CalendarEvent { month: Month::December, day: 23, name: "Festivus", icon: "🎄", is_holiday: false },
+    CalendarEvent { month: Month::December, day: 24, name: "Christmas Eve", icon: "✨", is_holiday: true },
+    CalendarEvent { month: Month::December, day: 25, name: "Christmas Day", icon: "🎁", is_holiday: true },
+    CalendarEvent { month: Month::December, day: 31, name: "New Year's Eve", icon: "🥂", is_holiday: true },
+];
+
+fn find_event(date: Date) -> Option<&'static CalendarEvent> {
+    CALENDAR_EVENTS.iter().find(|e| e.month == date.month() && e.day == date.day())
+}
+
+fn events_in_month(month: Month) -> Vec<&'static CalendarEvent> {
+    CALENDAR_EVENTS.iter().filter(|e| e.month == month).collect()
+}
+
 fn is_leap_year(year: i32) -> bool {
     (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 }
