@@ -83,6 +83,26 @@ fn events_in_month(month: Month) -> Vec<&'static CalendarEvent> {
     CALENDAR_EVENTS.iter().filter(|e| e.month == month).collect()
 }
 
+fn next_event(from_date: Date) -> Option<(&'static CalendarEvent, i64)> {
+    let mut min_diff = i64::MAX;
+    let mut closest = None;
+
+    for event in CALENDAR_EVENTS {
+        for year_offset in [0, 1] {
+            if let Ok(event_date) =
+                Date::from_calendar_date(from_date.year() + year_offset, event.month, event.day)
+            {
+                let diff = (event_date - from_date).whole_days();
+                if diff >= 0 && diff < min_diff {
+                    min_diff = diff;
+                    closest = Some((event, diff));
+                }
+            }
+        }
+    }
+    closest
+}
+
 fn is_leap_year(year: i32) -> bool {
     (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 }
