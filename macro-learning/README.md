@@ -7,3 +7,7 @@ cargo run -p macro-test-1
 ```
 
 The library currently provides `log_call` and `test_fn1` attributes.
+
+## `log_call`
+
+Place `#[log_call]` above a function to print its name immediately before the original function body runs. The attribute leaves the function's signature and body intact, so the function keeps its normal arguments and return value.
