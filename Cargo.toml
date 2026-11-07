@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "terminal-ui",
+    "macro-learning/macro-lib-1",
+    "macro-learning/macro-test-1",
+]
+resolver = "3"
