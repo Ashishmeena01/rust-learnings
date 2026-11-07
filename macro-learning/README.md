@@ -15,3 +15,7 @@ Place `#[log_call]` above a function to print its name immediately before the or
 ## `test_fn1`
 
 Place `#[test_fn1]` above a function to print `hello` and then run that function's original body. It is a deliberately small example of parsing an `ItemFn`, replacing its block, and emitting the updated function.
+
+## Try the macros
+
+The `macro-test-1` binary imports `log_call` from the local library and applies it to `dm`. Running the binary prints the macro's call message before the function's own greeting, followed by the message from `main`.
