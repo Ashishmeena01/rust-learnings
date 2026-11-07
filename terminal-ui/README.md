@@ -11,3 +11,7 @@ The app opens in a year overview. Use `?` to open the in-app shortcut guide and 
 ## Navigation
 
 Move by day with `h`/`l` or the left/right arrows. Move by week with `j`/`k` or the up/down arrows. Use `n` and `p` for adjacent months, `y` and `Y` for adjacent years, and `t` to return to today.
+
+## Views and themes
+
+Press `v` or Enter to switch between the twelve-month overview and the focused month view. Press `c` to cycle through B&W Obsidian, B&W Paper, Neobrutalist B&W, and Tokyo Night themes. Press `s` to cycle the calendar's date-label style.
