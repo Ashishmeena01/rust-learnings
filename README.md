@@ -8,3 +8,5 @@ This repository contains two small Rust projects:
 Each project can be built from its own directory with Cargo. See its README for project-specific instructions.
 
 The root `Cargo.toml` is a workspace manifest. From the repository root, use `cargo build --workspace` to build all workspace packages, or pass `-p terminal-ui` / `-p macro-test-1` to build one application.
+
+Use `cargo fmt --all` from the repository root to format every workspace package.
