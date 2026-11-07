@@ -19,3 +19,7 @@ Press `v` or Enter to switch between the twelve-month overview and the focused m
 ## Events
 
 The calendar highlights dates from a built-in annual observance list. The focused month view lists that month's events, while the inspector shows the selected date's event (if any) and the next upcoming event countdown.
+
+## Date inspector
+
+The inspector summarizes the selected date, its season and quarter, and its day-of-year progress. The `t` shortcut resets the selection to the current local date when the system clock is available.
