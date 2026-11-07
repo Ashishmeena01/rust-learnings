@@ -1,12 +1,10 @@
-use quote::*;
 use proc_macro::TokenStream;
+use quote::quote;
 use syn::{parse_macro_input, ItemFn};
 
+/// Prints the function's name each time the annotated function is called.
 #[proc_macro_attribute]
-pub fn log_call(
-    _attr: TokenStream,
-    item: TokenStream,
-) -> TokenStream {
+pub fn log_call(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut input = parse_macro_input!(item as ItemFn);
 
     let fn_name = input.sig.ident.clone();
@@ -22,15 +20,18 @@ pub fn log_call(
     quote!(#input).into()
 }
 
-
+/// Adds a greeting to the body of the annotated function while keeping its signature.
 #[proc_macro_attribute]
-pub fn test_fn1(_attr:TokenStream,_fn_token:TokenStream)->TokenStream{
-    let _item = parse_macro_input!(_fn_token as ItemFn);
-    quote!{
-        fn (){
-            println!("hello");
-        }
-    }.into()
+pub fn test_fn1(_attr: TokenStream, item: TokenStream) -> TokenStream {
+    let mut input = parse_macro_input!(item as ItemFn);
+    let original_block = input.block;
+
+    input.block = Box::new(syn::parse_quote!({
+        println!("hello");
+        #original_block
+    }));
+
+    quote!(#input).into()
 }
 
 fn add(one:u32,tow:u32)->u32{
