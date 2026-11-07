@@ -23,3 +23,7 @@ The calendar highlights dates from a built-in annual observance list. The focuse
 ## Date inspector
 
 The inspector summarizes the selected date, its season and quarter, and its day-of-year progress. The `t` shortcut resets the selection to the current local date when the system clock is available.
+
+## Help and exit
+
+Press `?` to open the shortcut overlay. Any key dismisses it; `q` exits the application directly from the overlay. Outside the overlay, `q` or Escape exits.
